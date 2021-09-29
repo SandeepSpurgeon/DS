@@ -1,0 +1,229 @@
+final class DLinkedList
+{
+    private Node start=null;
+    private Node end=null;
+    private int length=0;
+    
+    class Node
+    {
+        int value;
+        Node prev;
+        Node next;
+        
+        Node(int value)
+        {
+            this.value = value;
+            prev = null;
+            next = null;
+        }
+    }
+    
+    private Node create_node(int value)
+    {
+        return new Node(value);
+    }
+    
+    void setLast(int value)
+    {
+        if(start == null)
+        {
+            start = create_node(value);
+            end = start;
+        }
+        else
+        {
+            Node temp = end;
+            temp.next = create_node(value);
+            end = end.next;
+            end.prev = temp;
+        }
+        length++;
+        
+    }
+    
+    void setFirst(int value)
+    {
+        Node temp = create_node(value);
+        if(start == null)
+        {
+            start = temp;
+        }
+        else{
+            temp.next = start;
+            start.prev = temp;
+            start = temp;
+        }
+        length++;
+    }
+    
+    void setAt(int index, int value)
+    {
+        if(index < 0 || index > length)
+        {
+            System.out.println("Invalid index for setAt, valid range[0-"+ length + "]");
+            return;
+        }
+        else
+        {
+            if(index == 0)
+            {
+                setFirst(value);
+                length--;
+            }
+            else if(index == length){
+                setLast(value);
+                length--;
+            }
+            else
+            {
+                int count = 0;
+                Node temp = start;
+                Node temp1 = null;
+                while(index != count)
+                {
+                    temp = temp.next;
+                    count++;
+                }
+                temp1 = temp.prev;
+                temp1.next = create_node(value);
+                temp1.next.prev = temp1;
+                temp1 = temp1.next;
+                temp.prev = temp1;
+                temp1.next = temp;
+            }
+            length++;
+        }
+    }
+    
+    int removeAt(int index)
+    {
+        if(index < 0 || index >= length)
+        {
+            System.out.println("Invalid index for removeAt, valid range[0-"+ (length-1) + "]");
+            return -1;
+        }
+        else if(index == 0)
+        {
+            return removeFirst();
+        }
+        else if(index == (length-1))
+        {
+            return removeLast();
+        }
+        else{
+            Node temp = start;
+            int count = 0;
+            while(count != index)
+            {
+                temp = temp.next;
+                count++;
+            }
+            Node temp1 = temp.prev;
+            temp1.next = temp.next;
+            temp.prev = null;
+            temp1.next.prev = temp1;
+            length--;
+            temp.next = null;
+            return temp.value;
+        }
+    }
+    
+    int removeFirst()
+    {
+       if(length <= 0)
+       {
+            System.out.println("List is empty");
+            return -1;
+       } 
+       else
+       {
+           Node temp = start;
+           start = start.next;
+           temp.next = null;
+           if(length == 1)
+           {
+               end = null;
+           }
+           else
+           {
+               start.prev = null;
+           }
+           length--;
+           return temp.value;
+       }
+    }
+    
+    int removeLast()
+    {
+      if(length == 0)
+      {
+        System.out.println("List is empty");
+        return -1;
+      }
+      else
+      {
+        Node temp = end;
+        if(length == 1)
+        {
+            start = null;
+            end = null;
+            length--;
+            return temp.value;
+        }
+        else
+        {
+            int value = temp.value;
+            end = end.prev;
+            end.next = null;
+            temp.prev = null;
+            length--;
+            return value;
+        }
+      }
+    }
+    
+    void iter_seq()
+    {
+        Node temp = start;
+        while(temp != null)
+        {
+            System.out.print(temp.value + " ");
+            temp = temp.next;
+        }
+        System.out.println();
+    }
+    
+    void iter_seqr()
+    {
+        Node temp = end;
+        while(temp != null)
+        {
+            System.out.print(temp.value + " ");
+            temp = temp.prev;
+        }
+        System.out.println();
+    }
+    
+    void length()
+    {
+        System.out.println(this.length);
+    }
+    
+    void find(int value)
+    {
+        Node temp = start;
+        while(temp != null)
+        {   
+            int count=0;
+            if(temp.value == value)
+            {
+                System.out.println("Value:" + value + " found at index:" + count);
+                return;
+            }
+            temp = temp.next;
+            count++;
+        }
+        System.out.println("Value:" + value + " Not found");
+    }
+    
+}
